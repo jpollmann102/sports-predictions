@@ -1,187 +1,258 @@
 import pandas as pd
-import tensorflow as tf
 import numpy as np
-import statsmodels.api as sm
-import statsmodels.formula.api as smf
 import matplotlib.pyplot as plt
+import sys
 
-from scipy.stats import poisson, skellam
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import classification_report
+# from math import exp
 
-# teamStatsFile = 'csv/nfl_team_stats_2016_2016.csv'
-gameStatsFile = 'csv/nfl_game_stats_2016_2016.csv'
-season17File = 'csv/nfl_game_stats_2017_2018.csv'
+if(len(sys.argv) < 2):
+    print("Please include the file name for predictions you'd like to run")
+    sys.exit()
 
-# def processRawTeamStats(teamStatsCSV):
-#     # processes the file containing team data.
-#     names = ['PF_Off', 'Yds_Off', 'Ply_Off', 'Y_Per_P_Off', 'TO_Off', 'FL_Off', '1stD_Off', 'Cmp_Off', 'Att_Off',
-#                 'TD_Off', 'Int_Off', 'NY_Per_A_Off', 'Y_Per_A_Off', 'Pen_Off', '1stPy_Off', 'Sc_Perc_Off',
-#                 'TO_Perc_Off', 'EXP_Off', 'Cmp_POff', 'Att_POff', 'Cmp_Perc_Off', 'Yds_POff', 'TD_POff',
-#                 'TD_Perc_Off', 'Int_POff', 'Int_Perc_Off', 'Lng', 'Y_Per_A_POff', 'AY_Per_A_Off', 'Y_Per_C_Off',
-#                 'Y_Per_G_Off', 'Rate_Off', 'Sk_Off', 'NY_Per_A_POff', 'ANY_Per_A_Off', 'Sk_Perc_Off', '4QC', 'GWD',
-#                 'EXP_POff', 'PF_Def', 'Yds_Def', 'Ply_Def', 'Y_Per_P_Def', 'TO_Def', 'FL_Def', '1stD_Def',
-#                 'Cmp_Def', 'Att_Def', 'TD_Def', 'Int_Def', 'NY_Per_A_Def', 'Y_Per_A_Def', 'Pen_Def', '1stPy_Def',
-#                 'Sc_Perc_Def', 'TO_Perc_Def', 'EXP_Def', 'Cmp_PDef', 'Att_PDef', 'Cmp_Perc_Def', 'Yds_PDef',
-#                 'TD_PDef', 'TD_Perc_Def', 'Int_PDef', 'Int_Perc_Def', 'Y_Per_A_PDef', 'AY_Per_A_Def', 'Y_Per_C_Def',
-#                 'Y_Per_G_Def', 'Rate_Def', 'Sk_Def', 'NY_Per_A_PDef', 'ANY_Per_A_Def', 'Sk_Perc_Def', 'EXP_PDef']
+predictFile = sys.argv[1]
+
+def meanAbsolutePercentageError(yTrue, yPredict):
+    yTrue, yPredict = np.array(yTrue), np.array(yPredict)
+    return np.mean(np.abs((yTrue - yPredict) / yTrue)) * 100
+
+
+# Keys for team offense file
+# PF: points scored by team
+# Y/P: yards per play
+# FL: fumbles lost
+# NY/A: net yards gained per pass attempt
+# RY/A: net yards gained per rush attempt
+# Sc%: percent of drives scored
+
+# read in data
+
+
+
+
+dfTeamsO2018 = pd.read_csv('data/nfl_week17_team_offense_2018.csv', header=0, float_precision='round_trip')
+dfTeamsD2018 = pd.read_csv('data/nfl_week17_team_defense_2018.csv', header=0, float_precision='round_trip')
+dfTeamsO2017 = pd.read_csv('data/nfl_team_offense_2017.csv', header=0, float_precision='round_trip')
+dfTeamsD2017 = pd.read_csv('data/nfl_team_defense_2017.csv', header=0, float_precision='round_trip')
+dfGames2017 = pd.read_csv('data/nfl_games_training_2017.csv', header=0)
+dfGames2018 = pd.read_csv('data/nfl_games_training_2018.csv', header=0)
+
+dfWeekP = pd.read_csv('predict/{}'.format(predictFile), header=0)
+
+# these are the features of interest from the teams file
+# Okeys = ['Y/P','TO','PYds','PTD','Int','RYds','RTD','OPenYds','Sc%','OTO%']
+# Dkeys = ['OY/P','FTO','OPYds','OPTD','FInt','ORYds','ORTD','DPenYds','OSc%','DTO%']
+# Wkeys = ['WY/P','WTO','WPYds','WPTD','WInt','WRYds','WRTD','WPenYds','WSc%','WTO%','WOY/P','WFTO','WOPYds','WOPTD','WFInt','WORYds','WORTD','WDPenYds','WOSc%','WDTO%']
+# Lkeys = ['LY/P','LTO','LPYds','LPTD','LInt','LRYds','LRTD','LPenYds','LSc%','LTO%','LOY/P','LFTO','LOPYds','LOPTD','LFInt','LORYds','LORTD','LDPenYds','LOSc%','LDTO%']
+Wkeys = ['WPYds','WRYds','WSc%','WTO%','WFTO','WOPYds','WORYds','WOSc%','WDTO%']
+Lkeys = ['LPYds','LRYds','LSc%','LTO%','LFTO','LOPYds','LORYds','LOSc%','LDTO%']
+Okeys = ['PYds', 'RYds', 'Sc%', 'OTO%']
+Dkeys = ['FTO', 'OPYds', 'ORYds', 'OSc%', 'DTO%']
+WOkeys = ['WPYds', 'WRYds', 'WSc%', 'WTO%']
+WDkeys = ['WFTO', 'WOPYds', 'WORYds', 'WOSc%', 'WDTO%']
+LOkeys = ['LPYds', 'LRYds', 'LSc%', 'LTO%']
+LDkeys = ['LFTO', 'LOPYds', 'LORYds', 'LOSc%', 'LDTO%']
+
+reversedKeys = LOkeys + LDkeys + WOkeys + WDkeys
+
+# append each game from the season with the teams' stats
+dfGames2018 = pd.concat([dfGames2018, pd.DataFrame(0, index=np.arange(len(dfGames2018)), columns=Wkeys)], axis=1)
+dfGames2018 = pd.concat([dfGames2018, pd.DataFrame(0, index=np.arange(len(dfGames2018)), columns=Lkeys)], axis=1)
+dfGames2017 = pd.concat([dfGames2017, pd.DataFrame(0, index=np.arange(len(dfGames2017)), columns=Wkeys)], axis=1)
+dfGames2017 = pd.concat([dfGames2017, pd.DataFrame(0, index=np.arange(len(dfGames2017)), columns=Lkeys)], axis=1)
+dfWeekP = pd.concat([dfWeekP, pd.DataFrame(0, index=np.arange(len(dfWeekP)), columns=Wkeys)], axis=1)
+dfWeekP = pd.concat([dfWeekP, pd.DataFrame(0, index=np.arange(len(dfWeekP)), columns=Lkeys)], axis=1)
+
+# get lengths
+numTeams = len(dfTeamsO2018.index)
+numGames = len(dfGames2017.index)
+numPGames = len(dfWeekP.index)
+
+# get keys
+dfTempO2018 = dfTeamsO2018[Okeys]
+dfTempD2018 = dfTeamsD2018[Dkeys]
+dfTempO2017 = dfTeamsO2017[Okeys]
+dfTempD2017 = dfTeamsD2017[Dkeys]
+
+# fill in prediction dataframe
+for i in range(0,numPGames):
+    pWinner = dfWeekP.at[i,'Winner']
+    pLoser = dfWeekP.at[i,'Loser']
+
+    pwinnerIdx = dfTeamsO2018.index[dfTeamsO2018['Tm'] == pWinner].tolist()
+    ploserIdx = dfTeamsO2018.index[dfTeamsO2018['Tm'] == pLoser].tolist()
+
+    pwinnerOStats = dfTempO2018.iloc[pwinnerIdx[0],:]
+    ploserOStats = dfTempO2018.iloc[ploserIdx[0],:]
+    pwinnerDStats = dfTempD2018.iloc[pwinnerIdx[0],:]
+    ploserDStats = dfTempD2018.iloc[ploserIdx[0],:]
+
+    for j in range(0,len(pwinnerOStats)):
+        dfWeekP.at[i,WOkeys[j]] = pwinnerOStats[j]
+        dfWeekP.at[i,LOkeys[j]] = ploserOStats[j]
+
+    for j in range(0,len(pwinnerDStats)):
+        dfWeekP.at[i,WDkeys[j]] = pwinnerDStats[j]
+        dfWeekP.at[i,LDkeys[j]] = ploserDStats[j]
+
+# indices to be filled starts at 8
+# fill in values for the team stats
+for i in range(0,numGames):
+    # for every game
+    # get the winner and loser
+
+    # do the 2017 games
+    winner17 = dfGames2017.at[i,'Winner']
+    loser17 = dfGames2017.at[i,'Loser']
+
+    # get index of winner and loser
+    winner17Idx = dfTeamsO2017.index[dfTeamsO2017['Tm'] == winner17].tolist()
+    loser17Idx = dfTeamsO2017.index[dfTeamsO2017['Tm'] == loser17].tolist()
+
+    # get the winner and loser stats from team stats
+    winnerOStats17 = dfTempO2017.iloc[winner17Idx[0],:]
+    loserOStats17 = dfTempO2017.iloc[loser17Idx[0],:]
+    winnerDStats17 = dfTempD2017.iloc[winner17Idx[0],:]
+    loserDStats17 = dfTempD2017.iloc[loser17Idx[0],:]
+
+    winnerStats17 = winnerOStats17.append(winnerDStats17)
+    loserStats17 = loserOStats17.append(loserDStats17)
+
+    if i < len(dfGames2018.index):
+        # if we can do the 2018 games, do them
+
+        winner = dfGames2018.at[i,'Winner']
+        loser = dfGames2018.at[i,'Loser']
+
+        # get index of winner and loser
+        winnerIdx = dfTeamsO2018.index[dfTeamsO2018['Tm'] == winner].tolist()
+        loserIdx = dfTeamsO2018.index[dfTeamsO2018['Tm'] == loser].tolist()
+
+        # get the winner and loser stats from team stats
+        winnerOStats = dfTempO2018.iloc[winnerIdx[0],:]
+        loserOStats = dfTempO2018.iloc[loserIdx[0],:]
+        winnerDStats = dfTempD2018.iloc[winnerIdx[0],:]
+        loserDStats = dfTempD2018.iloc[loserIdx[0],:]
+
+        # for both teams
+        # fill in values
+        for j in range(0,len(winnerOStats)):
+            dfGames2018.at[i,WOkeys[j]] = winnerOStats[j]
+            dfGames2018.at[i,LOkeys[j]] = loserOStats[j]
+            dfGames2017.at[i,WOkeys[j]] = winnerOStats17[j]
+            dfGames2017.at[i,LOkeys[j]] = loserOStats17[j]
+
+
+        for j in range(0,len(winnerDStats)):
+            dfGames2018.at[i,WDkeys[j]] = winnerDStats[j]
+            dfGames2018.at[i,LDkeys[j]] = loserDStats[j]
+            dfGames2017.at[i,WDkeys[j]] = winnerDStats17[j]
+            dfGames2017.at[i,LDkeys[j]] = loserDStats17[j]
+    else:
+        # for both teams
+        # fill in values
+        for j in range(0,len(winnerOStats)):
+            dfGames2017.at[i,WOkeys[j]] = winnerOStats17[j]
+            dfGames2017.at[i,LOkeys[j]] = loserOStats17[j]
+
+        for j in range(0,len(winnerDStats)):
+            dfGames2017.at[i,WDkeys[j]] = winnerDStats17[j]
+            dfGames2017.at[i,LDkeys[j]] = loserDStats17[j]
+
+################################################################################
+#              Code below is used for predicting the winning team              #
+################################################################################
+
+# put together the 2017 and 2018 games
+dfGames = dfGames2018.append(dfGames2017)
+
+firstTeams = dfWeekP.iloc[:,0]
+secondTeams = dfWeekP.iloc[:,1]
+# get list of winning scores
+yW = dfGames.iloc[:,2]
+# get list of losing scores
+yL = dfGames.iloc[:,3]
+# get list of features to test
+# Xw = dfGames[WOkeys].join(dfGames[LDkeys])
+# Xl = dfGames[LOkeys].join(dfGames[WDkeys])
+Xw = pd.concat([dfGames[WOkeys], dfGames[LDkeys]], axis=1)
+Xl = pd.concat([dfGames[LOkeys], dfGames[WDkeys]], axis=1)
+
+predictXW = pd.concat([dfWeekP[WOkeys], dfWeekP[LDkeys]], axis=1)
+predictXL = pd.concat([dfWeekP[LOkeys], dfWeekP[WDkeys]], axis=1)
+
+# not useful for linear regression:
+# rushing yards
+# passing yards
+# yard per play
+
+# plt.figure(1)
+# plt.plot(dfGames['PtsW'], dfGames['WOSc%'], 'ro')
+# plt.ylabel('Winning Points')
+# plt.xlabel('Opposition Defense Rating')
+# plt.figure(2)
+# plt.plot(dfGames['PtsL'], dfGames['LOSc%'], 'o')
+# plt.ylabel('Losing Points')
+# plt.xlabel('Opposition Defense Rating')
+# plt.show()
+
+xwTrain, xwTest, ywTrain, ywTest = train_test_split(Xw, yW, random_state=0)
+xlTrain, xlTest, ylTrain, ylTest = train_test_split(Xl, yL, random_state=0)
+
+# scaler = StandardScaler()
 #
-#     data = pd.read_csv(teamStatsCSV, names=names, header=0)
-#     return data
+# scaler.fit(xwTrain)
+# xwTrain = scaler.transform(xwTrain)
+# xwTest = scaler.transform(xwTest)
+#
+# scaler.fit(xlTrain)
+# xlTrain = scaler.transform(xlTrain)
+# xlTest = scaler.transform(xlTest)
 
-def processRawGameStats(gameStatsCSV):
-    # processes the file containing game data
-    names = ['Visitor_Team', 'Visitor_Team_PTS', 'Home_Team', 'Home_Team_PTS']
+clfW = MLPClassifier(solver='lbfgs', hidden_layer_sizes=(30,30,30), random_state=1, max_iter=500)
+clfL = MLPClassifier(solver='lbfgs', hidden_layer_sizes=(30,30,30), random_state=1, max_iter=500)
+clfW.fit(xwTrain, ywTrain)
+clfL.fit(xlTrain, ylTrain)
 
-    data = pd.read_csv(gameStatsCSV, names=names, header=0)
-    return data
+predictionsW = clfW.predict(predictXW)
+predictionsL = clfL.predict(predictXL)
 
-def processSeasonFile(seasonCSV):
-    # processes the file containing a season's games and results
-    names = ['Visitor_Team', 'Visitor_Team_PTS', 'Home_Team', 'Home_Team_PTS']
+# print(classification_report(ywTest, predictionsW))
+# print(classification_report(ylTest, predictionsL))
 
-    data = pd.read_csv(seasonCSV, names=names, header=0)
-    return data
+# print("Training size: {}".format(len(xwTrain)))
+# logreg = LogisticRegression(C=1e5, solver='lbfgs', multi_class='multinomial')
+# logregW = LogisticRegression()
+# logregL = LogisticRegression()
+#
+# logregW.fit(xwTrain, ywTrain)
+# logregL.fit(xlTrain, ylTrain)
+#
+# predictionsW = logregW.predict(predictXW)
+# predictionsL = logregL.predict(predictXL)
 
-def printAvgScores(games):
-    out = games[['Home_Team', 'Visitor_Team', 'Home_Team_PTS', 'Visitor_Team_PTS']]
-    print(out.mean())
+# print("\nThe training set is:\n")
+# print(dfWeekP)
 
-# dfTeamStats = processRawTeamStats(teamStatsFile)
-dfGameStats = processRawGameStats(gameStatsFile)
-dfSeasonStats = processSeasonFile(season17File)
+# predictions = logreg.predict(predictX)
+# print("\nThe real winners were:\n")
+# print(yTest)
+# print("\nThe predicted first team scores are:\n")
+# print("\n{}".format(predictionsW))
+# # score = logregW.score(xwTest, ywTest)
+# # print("\nAccuracy for predicting the winning score was: {:.2f}%".format(score * 100))
+#
+# print("\nThe predicted second team scores are:\n")
+# print("\n{}".format(predictionsL))
+# score = logregL.score(xlTest, ylTest)
+# print("\nAccuracy for predicting the secon score was: {:.2f}%".format(score * 100))
 
-dfGameStats = dfGameStats[['Home_Team', 'Visitor_Team', 'Home_Team_PTS', 'Visitor_Team_PTS']]
-dfSeasonScores = dfSeasonStats[['Home_Team_PTS', 'Visitor_Team_PTS']]
-dfSeasonStats = dfSeasonStats[['Home_Team', 'Visitor_Team']]
-
-scoreModelData = pd.concat([dfGameStats[['Home_Team', 'Visitor_Team', 'Home_Team_PTS']].assign(home=1).rename(
-                            columns={'Home_Team':'team', 'Visitor_Team':'opponent', 'Home_Team_PTS':'score'}),
-                            dfGameStats[['Visitor_Team', 'Home_Team', 'Visitor_Team_PTS']].assign(home=0).rename(
-                            columns={'Visitor_Team':'team', 'Home_Team':'opponent', 'Visitor_Team_PTS':'score'})])
-
-poissonModel = smf.glm(formula="score ~ home + team + opponent", data=scoreModelData, family=sm.families.Poisson()).fit()
-
-def simulateGame(footModel, home, away, maxScore=55):
-    if gameStatsFile.__contains__('2000') or gameStatsFile.__contains__('2012'):
-        if home == 'Los Angeles Rams': home = 'St. Louis Rams'
-        if away == 'Los Angeles Rams': away = 'St. Louis Rams'
-    if home == 'Los Angeles Chargers': home = 'San Diego Chargers'
-    if away == 'Los Angeles Chargers': away = 'San Diego Chargers'
-    homeScoreAvg = footModel.predict(pd.DataFrame(data={'team':home, 'opponent':away, 'home':1}, index=[1])).values[0]
-    awayScoreAvg = footModel.predict(pd.DataFrame(data={'team':away, 'opponent':home, 'home':0}, index=[1])).values[0]
-
-    teamPrediction = [[poisson.pmf(i, teamAvg) for i in range(0, maxScore + 1)] for teamAvg in [homeScoreAvg, awayScoreAvg]]
-
-    return np.outer(np.array(teamPrediction[0]), np.array(teamPrediction[1]))
-
-homeTeams = dfSeasonStats.loc[:, "Home_Team"]
-awayTeams = dfSeasonStats.loc[:, "Visitor_Team"]
-homeScores = dfSeasonScores.loc[:, "Home_Team_PTS"]
-awayScores = dfSeasonScores.loc[:, "Visitor_Team_PTS"]
-
-def simulateSeason(footModel, homeTeams, awayTeams, printGames=True):
-    numGames = 256
-    correct = 0
-    lineWins = 0
-    perfectScorePredictions = 0
-    perfectGamePredictions = 0
-    closeScorePredictions = 0
-    closeGamePredictions = 0
-    avgLineError = 0
-    for i in range(0, numGames - 1):
-        game = simulateGame(footModel, homeTeams[i], awayTeams[i])
-        homeW = np.sum(np.tril(game, -1))
-        awayW = np.sum(np.triu(game, 1))
-        tie = np.sum(np.diag(game))
-
-        scoreProb = max(map(max, game))
-        homeS, awayS = np.where(game == scoreProb)
-
-        homeScore = homeS[0]
-        awayScore = awayS[0]
-
-        HpredVSreal = abs(homeScore - homeScores[i])
-        ApredVSreal = abs(awayScore - awayScores[i])
-
-        if homeScores[i] > awayScores[i]:
-            realW = homeTeams[i]
-            realL = awayTeams[i]
-            actualLine = homeScores[i] - awayScores[i]
-        else:
-            realW = awayTeams[i]
-            realL = homeTeams[i]
-            actualLine = awayScores[i] - homeScores[i]
-
-        if homeW > awayW:
-            predictedW = homeTeams[i]
-        else:
-            predictedW = awayTeams[i]
-
-        if realW == predictedW:
-            correct = correct + 1
-
-        winningScore = max(homeScore, awayScore)
-        if winningScore == homeScore:
-            losingScore = awayScore
-        else:
-            losingScore = homeScore
-
-        HscorePercentError = (HpredVSreal / homeScores[i])
-        AscorePercentError = (ApredVSreal / awayScores[i])
-
-        predictedLine = winningScore - losingScore
-
-        if(actualLine < predictedLine): lineWins += 1
-
-        lineError = (abs(predictedLine - actualLine) / actualLine) * 100
-
-        avgLineError += lineError
-
-        if HscorePercentError == 0 or AscorePercentError == 0:
-            perfectScorePredictions += 1
-
-        if HscorePercentError < .1 or AscorePercentError < .1:
-            closeScorePredictions += 1
-
-        if HscorePercentError == 0 and AscorePercentError == 0:
-            perfectGamePredictions += 1
-
-        if HscorePercentError < .1 and AscorePercentError < .1:
-            closeGamePredictions += 1
-
-        if printGames:
-            print("{} @ {}".format(homeTeams[i], awayTeams[i]))
-            print("\n")
-            print("{0} chance to win: {1:.2f}".format(homeTeams[i], homeW * 100))
-            print("{0} chance to win: {1:.2f}".format(awayTeams[i], awayW * 100))
-            print("Chance of a tie: {:.2f}".format(tie * 100))
-            print("\n")
-            print("Predicted winner: {}".format(predictedW))
-            print("Predicted score: {}: {} @ {}: {}".format(homeTeams[i], homeScore, awayTeams[i], awayScore))
-            print("Predicted line: {} - {:.2f}".format(predictedW, predictedLine))
-            print("\n")
-            print("Actual results:")
-            print("{}: {} @ {}: {}".format(homeTeams[i], homeScores[i], awayTeams[i], awayScores[i]))
-            print("{} predicted score error: {:.2f}".format(homeTeams[i], HscorePercentError * 100))
-            print("{} predicted score error: {:.2f}".format(awayTeams[i], AscorePercentError * 100))
-            print("Actual line: {} - {}".format(realW, actualLine))
-            print("Line error: {:.2f}".format(lineError))
-            print("Winner prediction correct: {}".format(realW == predictedW))
-            print("---------------------------------------------------------")
-            print("\n")
-
-    percentCorrectWinners = (correct / numGames) * 100
-    percentCloseScores = (closeScorePredictions / numGames) * 100
-    percentCloseGames = (closeGamePredictions / numGames) * 100
-    percentPerfectScores = (perfectScorePredictions / numGames) * 100
-    percentPerfectGames = (perfectGamePredictions / numGames) * 100
-    avgLineError /= numGames
-    return percentCorrectWinners, lineWins, percentPerfectScores, percentPerfectGames, percentCloseScores, percentCloseGames, avgLineError
-
-percentCorrect, lineWins, percentPerfectScores, percentPerfectGames, percentCloseScores, percentCloseGames, avgLineError = simulateSeason(poissonModel, homeTeams, awayTeams, printGames=False)
-print("The winner prediction accuracy was: {:.2f}".format(percentCorrect))
-print("Percent of time one team's score was predicted: {:.2f}".format(percentPerfectScores))
-print("Percent of time one team's score was predicted within 10%: {:.2f}".format(percentCloseScores))
-print("Percent of time both teams' scores were predicted: {:.2f}".format(percentPerfectGames))
-print("Percent of time both teams' scores were predicted within 10%: {:.2f}".format(percentCloseGames))
-print("The average line error was: {:.2f}".format(avgLineError))
-print("The number of line wins was: {}".format(lineWins))
+for i in range(len(predictionsW)):
+    if predictionsW[i] > predictionsL[i]:
+        print("Winner of the {:2} game is {:22} by a score of {} to {:3}, line of {}".format(i + 1, firstTeams[i], predictionsW[i], predictionsL[i], predictionsW[i] - predictionsL[i]))
+    else:
+        print("Winner of the {:2} game is {:22} by a score of {} to {:3}, line of {}".format(i + 1, secondTeams[i], predictionsL[i], predictionsW[i], predictionsL[i] - predictionsW[i]))
