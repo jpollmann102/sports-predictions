@@ -91,7 +91,7 @@ def scrapeNFLPassingStats(offense=True):
 
     soup = BS(html, 'html.parser')
     teamOTable = soup.find_all('table')[0]
-    names = ['Rank','Tm', 'Attempts', 'Completions', 'Percentage', 'Yds', 'Yds/A', 'Long', 'TD', 'Int', 'Sacks', 'YdsL', 'Passer Rating', 'Yds/G']
+    names = ['Rank','Tm', 'Attempts', 'Completions', 'Percentage', 'Yds', 'PYds/A', 'Long', 'TD', 'Int', 'Sacks', 'YdsL', 'Passer Rating', 'PYds/G']
     table = pd.DataFrame(columns=names, index=range(0,32))
     rows = teamOTable.find_all('tr')
 
@@ -140,7 +140,7 @@ def scrapeNFLRushingStats(offense=True):
 
     soup = BS(html, 'html.parser')
     teamOTable = soup.find_all('table')[0]
-    names = ['Rank','Tm', 'Attempts', 'Yds', 'Yds/A', 'Long', 'TD', 'Yds/G', 'Fumbles', 'FumL']
+    names = ['Rank','Tm', 'Attempts', 'Yds', 'RYds/A', 'Long', 'TD', 'RYds/G', 'Fumbles', 'FumL']
     table = pd.DataFrame(columns=names, index=range(0,32))
     rows = teamOTable.find_all('tr')
 
@@ -189,7 +189,7 @@ def scrapeNFLReceivingStats(offense=True):
 
     soup = BS(html, 'html.parser')
     teamOTable = soup.find_all('table')[0]
-    names = ['Rank','Tm', 'Receptions', 'Yds', 'Average', 'Long', 'TD', 'Yds/G', 'Fumbles', 'FumL']
+    names = ['Rank','Tm', 'Receptions', 'ReYds', 'Average', 'Long', 'TD', 'ReYds/G', 'Fumbles', 'FumL']
     table = pd.DataFrame(columns=names, index=range(0,32))
     rows = teamOTable.find_all('tr')
 
@@ -405,6 +405,7 @@ def scrapeNBASchedule(year=2019):
 
 # scrape all NFL stats
 def scrapeAllNFL():
+    scrapeNFLSchedule()
     scrapeNFLTeamStats(offense=True)
     scrapeNFLTeamStats(offense=False)
     scrapeNFLPassingStats(offense=True)
@@ -419,3 +420,52 @@ def scrapeAllNBA():
     scrapeNBATeamStats(offense=True)
     scrapeNBATeamStats(offense=False)
     scrapeNBATeamReboundStats()
+
+# scrape NFL betting lines
+# lines @ https://www.oddsportal.com/american-football/usa/nfl/
+def scrapeNFLBetting(week):
+
+    url = 'https://www.oddsportal.com/american-football/usa/nfl/'
+    outFileName = 'data/nfl/betting/nfl_bets_week{}.csv'.format(week)
+
+    options = webdriver.ChromeOptions()
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument('--ignore-ssl-errors')
+    driver = webdriver.Chrome(chrome_options=options)
+
+    try:
+        driver.set_page_load_timeout(60)
+        driver.get(url)
+        wait = WebDriverWait(driver, 100)
+        wait.until(EC.presence_of_element_located((By.ID, 'tournamentTable')))
+        html = driver.page_source
+
+    except TimeoutException as ex:
+        isrunning = 0
+        print(str(ex))
+        driver.close()
+        sys.exit()
+
+    driver.quit()
+
+    soup = BS(html, 'html.parser')
+    teamOTable = soup.find_all('table')[0]
+    names = ['Time','Teams','Team1','Team2','B']
+    table = pd.DataFrame(columns=names, index=range(0,16))
+    rows = teamOTable.find_all('tr')
+
+    rowMarker = 0
+    for i in range(3,len(rows)):
+        colMarker = 0
+        columns = rows[i].find_all('td')
+        if len(columns) == 0:
+            continue
+        if len(columns) > 5:
+            continue
+        for column in columns:
+            table.iat[rowMarker, colMarker] = column.get_text()
+            colMarker += 1
+        rowMarker += 1
+
+    table.drop(['Time','B'], axis=1, inplace=True)
+    table.to_csv(outFileName, index_label=False)
