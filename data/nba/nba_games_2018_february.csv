@@ -1,0 +1,161 @@
+Away,AwayPts,Home,HomePts
+1,Oklahoma City Thunder,124,Denver Nuggets,127
+2,Memphis Grizzlies,102,Detroit Pistons,104
+3,Milwaukee Bucks,89,Minnesota Timberwolves,108
+4,Houston Rockets,102,San Antonio Spurs,91
+5,Toronto Raptors,119,Washington Wizards,122
+6,Atlanta Hawks,110,Boston Celtics,119
+7,Los Angeles Lakers,102,Brooklyn Nets,99
+8,Indiana Pacers,126,Charlotte Hornets,133
+9,New York Knicks,90,Milwaukee Bucks,92
+10,New Orleans Pelicans,114,Oklahoma City Thunder,100
+11,Miami Heat,97,Philadelphia 76ers,103
+12,Utah Jazz,129,Phoenix Suns,97
+13,Golden State Warriors,119,Sacramento Kings,104
+14,Portland Trail Blazers,105,Toronto Raptors,130
+15,Houston Rockets,120,Cleveland Cavaliers,88
+16,Golden State Warriors,108,Denver Nuggets,115
+17,Miami Heat,107,Detroit Pistons,111
+18,Philadelphia 76ers,92,Indiana Pacers,100
+19,Chicago Bulls,103,Los Angeles Clippers,113
+20,New Orleans Pelicans,107,Minnesota Timberwolves,118
+21,Washington Wizards,115,Orlando Magic,98
+22,Dallas Mavericks,106,Sacramento Kings,99
+23,Utah Jazz,120,San Antonio Spurs,111
+24,Portland Trail Blazers,96,Boston Celtics,97
+25,Milwaukee Bucks,109,Brooklyn Nets,94
+26,Atlanta Hawks,99,New York Knicks,96
+27,Los Angeles Lakers,108,Oklahoma City Thunder,104
+28,Charlotte Hornets,115,Phoenix Suns,110
+29,Memphis Grizzlies,86,Toronto Raptors,101
+30,Charlotte Hornets,104,Denver Nuggets,121
+31,Portland Trail Blazers,91,Detroit Pistons,111
+32,Washington Wizards,111,Indiana Pacers,102
+33,Dallas Mavericks,101,Los Angeles Clippers,104
+34,Orlando Magic,111,Miami Heat,109
+35,Utah Jazz,133,New Orleans Pelicans,109
+36,Chicago Bulls,98,Sacramento Kings,104
+37,Memphis Grizzlies,82,Atlanta Hawks,108
+38,Houston Rockets,123,Brooklyn Nets,113
+39,Oklahoma City Thunder,125,Golden State Warriors,105
+40,Phoenix Suns,93,Los Angeles Lakers,112
+41,Milwaukee Bucks,103,New York Knicks,89
+42,Cleveland Cavaliers,98,Orlando Magic,116
+43,Washington Wizards,102,Philadelphia 76ers,115
+44,Boston Celtics,91,Toronto Raptors,111
+45,Minnesota Timberwolves,138,Cleveland Cavaliers,140
+46,Brooklyn Nets,106,Detroit Pistons,115
+47,Utah Jazz,92,Memphis Grizzlies,88
+48,Houston Rockets,109,Miami Heat,101
+49,San Antonio Spurs,129,Phoenix Suns,81
+50,Dallas Mavericks,103,Golden State Warriors,121
+51,Oklahoma City Thunder,81,Los Angeles Lakers,106
+52,Atlanta Hawks,98,Orlando Magic,100
+53,Charlotte Hornets,103,Portland Trail Blazers,109
+54,New York Knicks,88,Toronto Raptors,113
+55,Boston Celtics,110,Washington Wizards,104
+56,Cleveland Cavaliers,123,Atlanta Hawks,107
+57,Indiana Pacers,97,Boston Celtics,91
+58,Minnesota Timberwolves,113,Chicago Bulls,114
+59,Los Angeles Clippers,108,Detroit Pistons,95
+60,Denver Nuggets,104,Houston Rockets,130
+61,Milwaukee Bucks,85,Miami Heat,91
+62,New Orleans Pelicans,82,Philadelphia 76ers,100
+63,Portland Trail Blazers,118,Sacramento Kings,100
+64,Charlotte Hornets,94,Utah Jazz,106
+65,New Orleans Pelicans,138,Brooklyn Nets,128
+66,Washington Wizards,101,Chicago Bulls,90
+67,Los Angeles Lakers,123,Dallas Mavericks,130
+68,San Antonio Spurs,105,Golden State Warriors,122
+69,Milwaukee Bucks,111,Orlando Magic,104
+70,Los Angeles Clippers,98,Philadelphia 76ers,112
+71,Denver Nuggets,123,Phoenix Suns,113
+72,Detroit Pistons,115,Atlanta Hawks,118
+73,Cleveland Cavaliers,121,Boston Celtics,99
+74,Toronto Raptors,123,Charlotte Hornets,103
+75,Dallas Mavericks,97,Houston Rockets,104
+76,New York Knicks,113,Indiana Pacers,121
+77,Sacramento Kings,106,Minnesota Timberwolves,111
+78,Memphis Grizzlies,92,Oklahoma City Thunder,110
+79,Utah Jazz,115,Portland Trail Blazers,96
+80,Los Angeles Clippers,114,Brooklyn Nets,101
+81,Orlando Magic,101,Chicago Bulls,105
+82,New Orleans Pelicans,118,Detroit Pistons,103
+83,Phoenix Suns,83,Golden State Warriors,129
+84,New York Knicks,92,Philadelphia 76ers,108
+85,San Antonio Spurs,99,Utah Jazz,101
+86,Sacramento Kings,114,Dallas Mavericks,109
+87,San Antonio Spurs,109,Denver Nuggets,117
+88,Atlanta Hawks,92,Milwaukee Bucks,97
+89,Houston Rockets,126,Minnesota Timberwolves,108
+90,Cleveland Cavaliers,120,Oklahoma City Thunder,112
+91,Miami Heat,112,Toronto Raptors,115
+92,Los Angeles Clippers,129,Boston Celtics,119
+93,Indiana Pacers,108,Brooklyn Nets,103
+94,Toronto Raptors,122,Chicago Bulls,98
+95,Atlanta Hawks,98,Detroit Pistons,104
+96,Sacramento Kings,91,Houston Rockets,100
+97,Oklahoma City Thunder,121,Memphis Grizzlies,114
+98,Los Angeles Lakers,117,New Orleans Pelicans,139
+99,Washington Wizards,118,New York Knicks,113
+100,Charlotte Hornets,104,Orlando Magic,102
+101,Miami Heat,102,Philadelphia 76ers,104
+102,Golden State Warriors,117,Portland Trail Blazers,123
+103,Phoenix Suns,97,Utah Jazz,107
+104,Denver Nuggets,134,Milwaukee Bucks,123
+105,Los Angeles Lakers,111,Minnesota Timberwolves,119
+106,Philadelphia 76ers,116,Chicago Bulls,115
+107,Brooklyn Nets,96,Charlotte Hornets,111
+108,Washington Wizards,110,Cleveland Cavaliers,103
+109,Los Angeles Clippers,127,Golden State Warriors,134
+110,New York Knicks,120,Orlando Magic,113
+111,Oklahoma City Thunder,110,Sacramento Kings,107
+112,San Antonio Spurs,119,Denver Nuggets,122
+113,Boston Celtics,110,Detroit Pistons,98
+114,Minnesota Timberwolves,102,Houston Rockets,120
+115,Atlanta Hawks,93,Indiana Pacers,116
+116,Dallas Mavericks,102,Los Angeles Lakers,124
+117,Cleveland Cavaliers,112,Memphis Grizzlies,89
+118,Miami Heat,123,New Orleans Pelicans,124
+119,Los Angeles Clippers,128,Phoenix Suns,117
+120,Milwaukee Bucks,122,Toronto Raptors,119
+121,Portland Trail Blazers,100,Utah Jazz,81
+122,Charlotte Hornets,122,Washington Wizards,105
+123,Oklahoma City Thunder,80,Golden State Warriors,112
+124,Memphis Grizzlies,89,Miami Heat,115
+125,Chicago Bulls,104,Minnesota Timberwolves,122
+126,Boston Celtics,121,New York Knicks,112
+127,Orlando Magic,105,Philadelphia 76ers,116
+128,Portland Trail Blazers,106,Phoenix Suns,104
+129,Los Angeles Lakers,113,Sacramento Kings,108
+130,Dallas Mavericks,90,Utah Jazz,97
+131,Detroit Pistons,98,Charlotte Hornets,114
+132,San Antonio Spurs,110,Cleveland Cavaliers,94
+133,Houston Rockets,119,Denver Nuggets,114
+134,New Orleans Pelicans,123,Milwaukee Bucks,121
+135,Philadelphia 76ers,94,Washington Wizards,109
+136,Los Angeles Lakers,123,Atlanta Hawks,104
+137,Memphis Grizzlies,98,Boston Celtics,109
+138,Chicago Bulls,87,Brooklyn Nets,104
+139,Indiana Pacers,103,Dallas Mavericks,109
+140,Phoenix Suns,116,New Orleans Pelicans,125
+141,Golden State Warriors,125,New York Knicks,111
+142,Orlando Magic,105,Oklahoma City Thunder,112
+143,Minnesota Timberwolves,118,Sacramento Kings,100
+144,Detroit Pistons,94,Toronto Raptors,123
+145,Houston Rockets,96,Utah Jazz,85
+146,Chicago Bulls,103,Charlotte Hornets,118
+147,Brooklyn Nets,123,Cleveland Cavaliers,129
+148,Los Angeles Clippers,122,Denver Nuggets,120
+149,Philadelphia 76ers,101,Miami Heat,102
+150,Washington Wizards,107,Milwaukee Bucks,104
+151,Sacramento Kings,99,Portland Trail Blazers,116
+152,Indiana Pacers,102,Atlanta Hawks,107
+153,Charlotte Hornets,106,Boston Celtics,134
+154,Oklahoma City Thunder,111,Dallas Mavericks,110
+155,Milwaukee Bucks,87,Detroit Pistons,110
+156,Houston Rockets,105,Los Angeles Clippers,92
+157,Phoenix Suns,110,Memphis Grizzlies,102
+158,Toronto Raptors,117,Orlando Magic,104
+159,New Orleans Pelicans,121,San Antonio Spurs,116
+160,Golden State Warriors,109,Washington Wizards,101

@@ -12,12 +12,11 @@ from sklearn.neural_network import MLPClassifier
 # from sklearn.preprocessing import StandardScaler
 # from sklearn.metrics import classification_report
 
-if(len(sys.argv) < 3):
+if(len(sys.argv) < 2):
     print("Please include the week and if you should scrape (Y/N)")
     sys.exit()
 
-week = sys.argv[1]
-scrape = sys.argv[2]
+scrape = sys.argv[1]
 
 if scrape == 'Y' or scrape == 'y':
     sc.scrapeAllNFL()
@@ -26,24 +25,27 @@ if scrape == 'Y' or scrape == 'y':
 #     yTrue, yPredict = np.array(yTrue), np.array(yPredict)
 #     return np.mean(np.abs((yTrue - yPredict) / yTrue)) * 100
 
-dfX = pre.cleanTrainingX(week)
+dfX = pre.cleanTrainingX()
 dfY = pre.cleanTrainingY(dfX)
+print(dfX)
 
 dfX.drop(['Winner', '@', 'Loser', 'PtsW', 'PtsL'], axis=1, inplace=True)
 
-features = ['PYds/A', 'Average', 'RYds/G', 'PTS/G']
-dfX = dfX[features]
+# features = ['PYds/A', 'Average', 'RYds/G', 'PTS/G']
+# dfX = dfX[features]
 
-xTrain, xTest, yTrain, yTest = train_test_split(dfX.values, dfY.values, test_size=0.15, random_state=1)
+xTrain, xTest, yTrain, yTest = train_test_split(dfX.values, dfY.values, test_size=0.2, random_state=1)
 
-logreg = LogisticRegression(solver='lbfgs')
+logreg = LogisticRegression(solver='lbfgs', max_iter=4000)
 logreg.fit(xTrain, np.ravel(yTrain, order='C'))
 score = logreg.score(xTest, yTest)
 print("\nAccuracy for predicting the winner with logistic regression was: {:.2f}%".format(score * 100))
 
 dfUnplayed = pre.getUnplayedGames()
-dfPredict = pre.cleanPredictions(week)
-dfPredict = dfPredict[features]
+dfUnplayed.columns = ['Away','@','Home']
+dfPredict = pre.cleanPredictions()
+# dfPredict = dfPredict[features]
+print(dfPredict)
 
 predictions = logreg.predict(dfPredict)
 print(dfUnplayed)
@@ -52,7 +54,7 @@ print(predictions)
 
 # lowest 6, highest 26
 # it seems 12 and 7 are the best hidden sizes
-clf = MLPClassifier(hidden_layer_sizes=(12), max_iter=4000)
+clf = MLPClassifier(hidden_layer_sizes=(53), max_iter=4000)
 clf.fit(xTrain, np.ravel(yTrain, order='C'))
 predictions = clf.predict(xTest)
 print("\nNeural network report:")

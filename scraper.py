@@ -12,13 +12,19 @@ from bs4 import BeautifulSoup as BS
 
 # team offense @ http://www.espn.com/nfl/statistics/team/_/stat/total
 # team defense @ http://www.espn.com/nfl/statistics/team/_/stat/total/position/defense
-def scrapeNFLTeamStats(offense=True):
+def scrapeNFLTeamStats(year=2018, offense=True):
     if offense:
-        url = 'http://www.espn.com/nfl/statistics/team/_/stat/total'
-        outFileName = 'data/nfl/nfl_team_offense.csv'
+        if year == 2018:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/total'
+        else:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/total/year/{}'.format(year)
+        outFileName = 'data/nfl/nfl_team_offense_{}.csv'.format(year)
     else:
-        url = 'http://www.espn.com/nfl/statistics/team/_/stat/total/position/defense'
-        outFileName = 'data/nfl/nfl_team_defense.csv'
+        if year == 2018:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/total/position/defense'
+        else:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/total/position/defense/year/{}'.format(year)
+        outFileName = 'data/nfl/nfl_team_defense_{}.csv'.format(year)
 
     options = webdriver.ChromeOptions()
     options.add_argument('--ignore-certificate-errors')
@@ -61,13 +67,19 @@ def scrapeNFLTeamStats(offense=True):
 
 # team passing @ http://www.espn.com/nfl/statistics/team/_/stat/passing
 # team pass D @ http://www.espn.com/nfl/statistics/team/_/stat/passing/position/defense
-def scrapeNFLPassingStats(offense=True):
+def scrapeNFLPassingStats(year=2018, offense=True):
     if offense:
-        url = 'http://www.espn.com/nfl/statistics/team/_/stat/passing'
-        outFileName = 'data/nfl/nfl_team_pass_offense.csv'
+        if year == 2018:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/passing'
+        else:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/passing/year/{}'.format(year)
+        outFileName = 'data/nfl/nfl_team_pass_offense_{}.csv'.format(year)
     else:
-        url = 'http://www.espn.com/nfl/statistics/team/_/stat/passing/position/defense'
-        outFileName = 'data/nfl/nfl_team_pass_defense.csv'
+        if year == 2018:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/passing/position/defense'
+        else:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/passing/position/defense/year/{}'.format(year)
+        outFileName = 'data/nfl/nfl_team_pass_defense_{}.csv'.format(year)
 
     options = webdriver.ChromeOptions()
     options.add_argument('--ignore-certificate-errors')
@@ -110,13 +122,19 @@ def scrapeNFLPassingStats(offense=True):
 
 # team rushing @ http://www.espn.com/nfl/statistics/team/_/stat/rushing
 # team rush D @ http://www.espn.com/nfl/statistics/team/_/stat/rushing/position/defense
-def scrapeNFLRushingStats(offense=True):
+def scrapeNFLRushingStats(year=2018, offense=True):
     if offense:
-        url = 'http://www.espn.com/nfl/statistics/team/_/stat/rushing'
-        outFileName = 'data/nfl/nfl_team_rush_offense.csv'
+        if year == 2018:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/rushing'
+        else:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/rushing/year/{}'.format(year)
+        outFileName = 'data/nfl/nfl_team_rush_offense_{}.csv'.format(year)
     else:
-        url = 'http://www.espn.com/nfl/statistics/team/_/stat/rushing/position/defense'
-        outFileName = 'data/nfl/nfl_team_rush_defense.csv'
+        if year == 2018:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/rushing/position/defense'
+        else:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/rushing/position/defense/year/{}'.format(year)
+        outFileName = 'data/nfl/nfl_team_rush_defense_{}.csv'.format(year)
 
     options = webdriver.ChromeOptions()
     options.add_argument('--ignore-certificate-errors')
@@ -159,13 +177,19 @@ def scrapeNFLRushingStats(offense=True):
 
 # team receiving @ http://www.espn.com/nfl/statistics/team/_/stat/receiving
 # team receiving D @ http://www.espn.com/nfl/statistics/team/_/stat/receiving/position/defense
-def scrapeNFLReceivingStats(offense=True):
+def scrapeNFLReceivingStats(year=2018, offense=True):
     if offense:
-        url = 'http://www.espn.com/nfl/statistics/team/_/stat/receiving'
-        outFileName = 'data/nfl/nfl_team_receiving_offense.csv'
+        if year == 2018:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/receiving'
+        else:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/receiving/year/{}'.format(year)
+        outFileName = 'data/nfl/nfl_team_receiving_offense_{}.csv'.format(year)
     else:
-        url = 'http://www.espn.com/nfl/statistics/team/_/stat/receiving/position/defense'
-        outFileName = 'data/nfl/nfl_team_receiving_defense.csv'
+        if year == 2018:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/receiving/position/defense'
+        else:
+            url = 'http://www.espn.com/nfl/statistics/team/_/stat/receiving/position/defense/year/{}'.format(year)
+        outFileName = 'data/nfl/nfl_team_receiving_defense_{}.csv'.format(year)
 
     options = webdriver.ChromeOptions()
     options.add_argument('--ignore-certificate-errors')
@@ -253,13 +277,19 @@ def scrapeNFLSchedule(year=2018):
 
 # team offense @ http://www.espn.com/nba/statistics/team/_/stat/offense-per-game
 # team defense @ http://www.espn.com/nba/statistics/team/_/stat/defense-per-game
-def scrapeNBATeamStats(offense=True):
+def scrapeNBATeamStats(offense=True, year=2019):
     if offense:
-        url = 'http://www.espn.com/nba/statistics/team/_/stat/offense-per-game'
-        outFileName = 'data/nba/nba_team_offense.csv'
+        if year == 2019:
+            url = 'http://www.espn.com/nba/statistics/team/_/stat/offense-per-game'
+        else:
+            url = 'http://www.espn.com/nba/statistics/team/_/stat/offense-per-game/sort/avgPoints/year/{}'.format(year)
+        outFileName = 'data/nba/nba_team_offense_{}.csv'.format(year)
     else:
-        url = 'http://www.espn.com/nba/statistics/team/_/stat/defense-per-game'
-        outFileName = 'data/nba/nba_team_defense.csv'
+        if year == 2019:
+            url = 'http://www.espn.com/nba/statistics/team/_/stat/defense-per-game'
+        else:
+            url = 'http://www.espn.com/nba/statistics/team/_/stat/defense-per-game/sort/avgPointsOpponent/year/{}'.format(year)
+        outFileName = 'data/nba/nba_team_defense_{}.csv'.format(year)
 
     options = webdriver.ChromeOptions()
     options.add_argument('--ignore-certificate-errors')
@@ -303,10 +333,14 @@ def scrapeNBATeamStats(offense=True):
     table.to_csv(outFileName, index_label=False)
 
 # team rebounds @ http://www.espn.com/nba/statistics/team/_/stat/rebounds-per-game
-def scrapeNBATeamReboundStats():
+def scrapeNBATeamReboundStats(year=2019):
 
-    url = 'http://www.espn.com/nba/statistics/team/_/stat/rebounds-per-game'
-    outFileName = 'data/nba/nba_team_rebounds.csv'
+    if year == 2019:
+        url = 'http://www.espn.com/nba/statistics/team/_/stat/rebounds-per-game'
+    else:
+        url = 'http://www.espn.com/nba/statistics/team/_/stat/rebounds-per-game/sort/avgRebounds/year/{}'.format(year)
+
+    outFileName = 'data/nba/nba_team_rebounds_{}.csv'.format(year)
 
     options = webdriver.ChromeOptions()
     options.add_argument('--ignore-certificate-errors')
@@ -397,11 +431,34 @@ def scrapeNBAScheduleByMonth(year=2019, month='october'):
     table.dropna(how='all', inplace=True)
     table.to_csv(outFileName, index_label=False)
 
-def scrapeNBASchedule(year=2019):
+def scrapeNBASchedule(years):
     months = ['october', 'november', 'december', 'january', 'february', 'march', 'april']
-    for month in months:
-        print("Scraping {}...".format(month))
-        scrapeNBAScheduleByMonth(year, month)
+
+    for year in years:
+        for month in months:
+            print("Scraping {}...".format(month))
+            scrapeNBAScheduleByMonth(year, month)
+
+def scrapeNBAStatsByYear(years, offense=True):
+    for year in years:
+        scrapeNBATeamStats(offense, year)
+        scrapeNBATeamReboundStats(year)
+
+def scrapeNFLScheduleByYear(years):
+
+    for year in years:
+        scrapeNFLSchedule(year)
+
+def scrapeNFLStatsByYear(years, offense=True):
+    for year in years:
+        scrapeNFLTeamStats(year, offense=True)
+        scrapeNFLTeamStats(year, offense=False)
+        scrapeNFLPassingStats(year, offense=True)
+        scrapeNFLPassingStats(year, offense=False)
+        scrapeNFLRushingStats(year, offense=True)
+        scrapeNFLRushingStats(year, offense=False)
+        scrapeNFLReceivingStats(year, offense=True)
+        scrapeNFLReceivingStats(year, offense=False)
 
 # scrape all NFL stats
 def scrapeAllNFL():
