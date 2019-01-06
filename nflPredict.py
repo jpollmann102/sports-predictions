@@ -27,11 +27,15 @@ if scrape == 'Y' or scrape == 'y':
 
 dfX = pre.cleanTrainingX()
 dfY = pre.cleanTrainingY(dfX)
-print(dfX)
 
 dfX.drop(['Winner', '@', 'Loser', 'PtsW', 'PtsL'], axis=1, inplace=True)
 
-# features = ['PYds/A', 'Average', 'RYds/G', 'PTS/G']
+# best 4 features are:
+# PTS/G
+# Passer Rating
+# Yds
+# Yds/G
+# features = ['PTS/G', 'Passer Rating', 'Yds', 'Yds/G']
 # dfX = dfX[features]
 
 xTrain, xTest, yTrain, yTest = train_test_split(dfX.values, dfY.values, test_size=0.2, random_state=1)
@@ -52,12 +56,13 @@ print(dfUnplayed)
 print("\nLogistic regression predictions:\n")
 print(predictions)
 
-# lowest 6, highest 26
-# it seems 12 and 7 are the best hidden sizes
-clf = MLPClassifier(hidden_layer_sizes=(53), max_iter=4000)
+# lowest 37, highest 186 with feature selection
+# lowest 19, highest 93 without feature selection
+hiddenSize = 56
+clf = MLPClassifier(hidden_layer_sizes=(hiddenSize), max_iter=4000)
 clf.fit(xTrain, np.ravel(yTrain, order='C'))
 predictions = clf.predict(xTest)
-print("\nNeural network report:")
+print("\nNeural network report w/ {} hidden nodes:".format(hiddenSize))
 print("High f1 scores are good\n")
 print(classification_report(yTest,predictions))
 predictions = clf.predict(dfPredict)

@@ -1,19 +1,17 @@
 import numpy as np
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import f_classif
-import preprocess as pre
+import preprocessNFL as pre
 
-# teamStatNames = ['Yds/G','PYds/G','RYds/G','PTS/G']
-# teamPassNames = ['Percentage','PYds/A','Passer Rating']
-# teamRushNames = ['RYds/A']
-# teamReceiveNames = ['Average','ReYds/G']
-# teamStatsNames = [teamStatNames, teamPassNames, teamRushNames, teamReceiveNames]
+# teamStatNames = ['Yds','Yds/G','PYds','RYds','PTS/G']
+# teamPassNames = ['PYds/A', 'Passer Rating']
+# teamReceiveNames = ['ReYds', 'ReYds/G']
 
-dfX = pre.cleanTrainingX(16)
+dfX = pre.cleanTrainingX()
 dfY = pre.cleanTrainingY(dfX)
 dfX.drop(['Winner', '@', 'Loser', 'PtsW', 'PtsL'], axis=1, inplace=True)
 dfUnplayed = pre.getUnplayedGames()
-dfPredict = pre.cleanPredictions(16)
+dfPredict = pre.cleanPredictions()
 
 X = dfX.values
 Y = dfY.values
@@ -29,7 +27,7 @@ features = fit.transform(X)
 print(features[0:5,:])
 
 # best 4 features are:
-# PYds/A
-# Average Reception Yards
+# PTS/G
 # Passer Rating
-# RYds/G
+# Yds
+# Yds/G

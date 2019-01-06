@@ -30,9 +30,9 @@ def cleanPredictions():
     # teamReceiveNames = ['Average','ReYds/G']
 
     teamStatNames = ['Yds','Yds/G','PYds','RYds','PTS/G']
-    teamPassNames = ['Passer Rating']
+    teamPassNames = ['PYds/A', 'Passer Rating']
     # teamRushNames = ['RYds/A']
-    teamReceiveNames = ['ReYds']
+    teamReceiveNames = ['ReYds', 'ReYds/G']
 
     # statsO = [dfTeamO, dfTeamPassO, dfTeamRushO, dfTeamReceiveO]
     # statsD = [dfTeamD, dfTeamPassD, dfTeamRushD, dfTeamReceiveD]
@@ -89,9 +89,9 @@ def cleanPredictions():
                 winnerStatD = statsD[j].iloc[firstIdx,statsD[j].columns.get_loc(teamStatsNames[j][k])]
                 loserStatD = statsD[j].iloc[secondIdx,statsD[j].columns.get_loc(teamStatsNames[j][k])]
                 if dfTemp.iloc[i,1] == '@':
-                    valO = loserStatO - winnerStatO
+                    valO = winnerStatO - loserStatO
                 else:
-                    valO =  winnerStatO - loserStatO
+                    valO = loserStatO - winnerStatO
 
                 valD = winnerStatD - loserStatD
                 dfPredict.iloc[i,dfPredict.columns.get_loc(teamStatsNames[j][k])] = valO
@@ -112,8 +112,8 @@ def cleanTrainingX():
     # dfxNames = ['Winner','@','Loser','PtsW','PtsL'] + teamStatNames + teamPassNames + teamRushNames + teamReceiveNames
 
     teamStatNames = ['Yds','Yds/G','PYds','RYds','PTS/G']
-    teamPassNames = ['Passer Rating']
-    teamReceiveNames = ['ReYds']
+    teamPassNames = ['PYds/A', 'Passer Rating']
+    teamReceiveNames = ['ReYds', 'ReYds/G']
 
     teamStatsNames = [teamStatNames, teamPassNames, teamReceiveNames]
     dfxNames = ['Winner','@','Loser','PtsW','PtsL'] + teamStatNames + teamPassNames + teamReceiveNames
